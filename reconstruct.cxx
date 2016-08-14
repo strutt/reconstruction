@@ -101,6 +101,10 @@ int main(int argc, char *argv[]){
   TNamed* comments = new TNamed("comments", "Applied simple, static notch at 260#pm26 MHz and 370#pm26");
   comments->Write();
   delete comments;
+
+  TNamed* comments2 = new TNamed("comments2", "2 coarse peaks, 0 fine peaks");
+  comments2->Write();
+  delete comments2;  
     
   TTree* eventSummaryTree = new TTree("eventSummaryTree", "eventSummaryTree");
   // AnitaEventSummary* eventSummary = new AnitaEventSummary();
@@ -127,20 +131,22 @@ int main(int argc, char *argv[]){
     UsefulAdu5Pat usefulPat(pat);
     // cc->correlateEvent(usefulEvent);
 
-    const Int_t myNumPeaks = 2;
-    cc->reconstructEvent(usefulEvent, myNumPeaks, myNumPeaks);
+    const Int_t myNumPeaksCoarse = 2;
+    const Int_t myNumPeaksFine = 0;
+    cc->reconstructEvent(usefulEvent, myNumPeaksCoarse, myNumPeaksFine);
 
     
     eventSummary = new AnitaEventSummary(header, &usefulPat);
     // std::cout << eventSummary->sun.theta << "\t" << eventSummary->sun.phi << std::endl;
 
+    const Int_t coherentDeltaPhi = 0;
+    Double_t minY = 0;
     for(Int_t polInd=0; polInd < AnitaPol::kNotAPol; polInd++){
       AnitaPol::AnitaPol_t pol = (AnitaPol::AnitaPol_t) polInd;
 
       Int_t pointInd=0;
-      for(Int_t peakInd=0; peakInd < myNumPeaks; peakInd++){
+      for(Int_t peakInd=0; peakInd < myNumPeaksCoarse; peakInd++){
 	
-	Double_t minY = 0;
 
 	cc->getCoarsePeakInfo(pol, peakInd,
 			      eventSummary->peak[pol][pointInd].value,
@@ -148,7 +154,6 @@ int main(int argc, char *argv[]){
 			      eventSummary->peak[pol][pointInd].theta);
 
 	
-	const Int_t coherentDeltaPhi = 0;
 	TGraph* grGlobal0 = cc->makeCoherentlySummedWaveform(pol,
 							     eventSummary->peak[pol][pointInd].phi,
 							     eventSummary->peak[pol][pointInd].theta,
@@ -163,7 +168,8 @@ int main(int argc, char *argv[]){
 	delete grGlobal0Hilbert;
 
 	pointInd++;
-
+      }
+      for(Int_t peakInd=0; peakInd < myNumPeaksFine; peakInd++){      
 	cc->getFinePeakInfo(pol, peakInd, 
 			    eventSummary->peak[pol][pointInd].value,
 			    eventSummary->peak[pol][pointInd].phi,
