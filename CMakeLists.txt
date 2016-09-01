@@ -42,7 +42,7 @@ else()
     set(INC_UTIL /usr/local/include)
 endif()
 
-find_package(ROOT REQUIRED COMPONENTS MathMore MathCore RIO Hist Tree Net Minuit Minuit2)
+find_package(ROOT REQUIRED COMPONENTS MathMore MathCore RIO Hist Tree Net Minuit Minuit2 TreePlayer)
 message("ROOT_INCLUDE_DIRS is set to ${ROOT_INCLUDE_DIRS}")
 
 include_directories(${PROJECT_SOURCE_DIR} ${ROOT_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/include ${FFTW_INCLUDES} ${ZLIB_INCLUDES} ${UTIL_INC_DIR})
@@ -57,13 +57,10 @@ set(ANITA_LIBS AnitaEvent AnitaAnalysis AnitaAnalysisTools AnitaCorrelator RootF
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wshadow -Werror")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow -Werror")
 
-set(BINARIES reconstruct)
+set(BINARIES reconstruct numEvents)
 
 FOREACH(binary ${BINARIES})
   MESSAGE(STATUS "Process file: ${binary}")
   add_executable(${binary} ${binary}.cxx)
-  target_link_libraries(${binary} ${ZLIB_LIBRARIES} ${ANITA_LIBS} ${ROOT_LIBRARIES} ${FFTW_LIBRARIES})  
+  target_link_libraries(${binary} ${ZLIB_LIBRARIES} ${ANITA_LIBS} ${ROOT_LIBRARIES} ${FFTW_LIBRARIES})
 ENDFOREACH(binary)
-
-
-
