@@ -32,9 +32,12 @@
 
 int main(int argc, char *argv[]){
 
+    const Int_t nDivisions = 10; // divide job up into this many subjobs
+
   // if(!(argc==3 || argc==2)){
   if(argc!=3){
-    std::cerr << "Usage: " << argv[0] << " [firstRun] [lastRun]" << std::endl;
+    std::cerr << "Usage: " << argv[0] << TString::Format(" [firstRun] [subDivisionOfEvents (0-%d)]", nDivisions)
+	      << std::endl;
     return 1;
   }
 
@@ -44,7 +47,6 @@ int main(int argc, char *argv[]){
   const Int_t firstRun = atoi(argv[1]);
   const Int_t lastRun = firstRun; //argc==3 ? atoi(argv[2]) : firstRun;
 
-  const Int_t nDivisions = 1000; // divide job up into this many subjobs
   const Int_t whichDivisionOfEvents = atoi(argv[2]); // should be a number from 0-9 inclusive
   if(whichDivisionOfEvents >= nDivisions){
     return 1;
