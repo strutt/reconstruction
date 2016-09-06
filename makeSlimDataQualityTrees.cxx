@@ -75,7 +75,7 @@ int main(int argc, char *argv[]){
     return 1;
   }
 
-  calEventChain->BuildIndex("eventNumber");
+  // calEventChain->BuildIndex("eventNumber");
   // gpsChain->BuildIndex("eventNumber");
 
   RawAnitaHeader* header = NULL;
@@ -176,7 +176,8 @@ int main(int argc, char *argv[]){
     //   continue;
     // }
 
-    calEventChain->GetEntryWithIndex(header->eventNumber);
+    // calEventChain->GetEntryWithIndex(header->eventNumber);
+    calEventChain->GetEntry(entry);
 
     UsefulAnitaEvent* usefulEvent = new UsefulAnitaEvent(calEvent);
     // usefulEvent->setAlfaFilterFlag(false);
