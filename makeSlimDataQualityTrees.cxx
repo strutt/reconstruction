@@ -50,6 +50,7 @@ int main(int argc, char *argv[]){
 
   for(Int_t run=firstRun; run<=lastRun; run++){
     TString fileName = TString::Format("~/UCL/ANITA/flight1415/root/run%d/headFile%d.root", run, run);
+    // TString fileName = TString::Format("~/UCL/ANITA/flight1415/root/run%d/decimatedHeadFile%d.root", run, run);
     headChain->Add(fileName);
     // fileName = TString::Format("~/UCL/ANITA/flight1415/root/run%d/gpsEvent%d.root", run, run);
     // gpsChain->Add(fileName);
@@ -133,7 +134,9 @@ int main(int argc, char *argv[]){
 			  theMaxVolts,
 			  TString::Format("theMaxVolts[%d]/D",
 					  NUM_POL));
-
+  Double_t alfaChanMaxVolts;
+  dataQualityTree->Branch("alfaChanMaxVolts",
+			  &alfaChanMaxVolts);
 
   // Double_t minVolts[NUM_POL][NUM_SEAVEYS];
   // dataQualityTree->Branch("minVolts",
@@ -147,6 +150,12 @@ int main(int argc, char *argv[]){
 			  TString::Format("theMinVolts[%d]/D",
 					  NUM_POL));
 
+  Double_t maxAsym[NUM_POL];
+  dataQualityTree->Branch("maxAsym",
+			  maxAsym,
+			  TString::Format("maxAsym[%d]/D",
+					  NUM_POL));
+
   Long64_t nEntries = headChain->GetEntries();
   Long64_t maxEntry = 0; //2500;
   Long64_t startEntry = 0;
@@ -157,6 +166,15 @@ int main(int argc, char *argv[]){
   for(Long64_t entry = startEntry; entry < maxEntry; entry++){
 
     headChain->GetEntry(entry);
+
+    // Int_t isMinBias = RootTools::isMinBiasSampleEvent(header); //header->getTriggerBitG12() | header->getTriggerBitADU5() | header->getTriggerBitSoftExt();
+
+
+
+    // if(isMinBias == 0){
+    //   p.inc(entry, maxEntry);
+    //   continue;
+    // }
 
     calEventChain->GetEntryWithIndex(header->eventNumber);
 
@@ -173,6 +191,7 @@ int main(int argc, char *argv[]){
     for(int pol=0; pol<NUM_POL; pol++){
       theMaxVolts[pol] = 0;
       theMinVolts[pol] = 0;
+      maxAsym[pol] = 0;
       for(Int_t ant=0; ant<NUM_SEAVEYS; ant++){
 
 	TGraph* gr = usefulEvent->getGraph(ant, (AnitaPol::AnitaPol_t) pol);
@@ -191,6 +210,8 @@ int main(int argc, char *argv[]){
 	// maxVolts[pol][ant] = -9999;
 	// minVolts[pol][ant] = 9999;
 	// power[pol][ant] = 0;
+	Double_t maxThisChan = 0;
+	Double_t minThisChan = 0;
 	for(int samp=0; samp < numPoints[pol][ant]; samp++){
 	  Double_t v = gr->GetY()[samp];
 	  // power[pol][ant] += v*v*gr->GetX()[samp];
@@ -198,17 +219,37 @@ int main(int argc, char *argv[]){
 	  // if(v > maxVolts[pol][ant]){
 	  //   maxVolts[pol][ant] = v;
 	  // }
-	  if(v > theMaxVolts[pol]){
-	    theMaxVolts[pol] = v;
+	  if(v > maxThisChan){
+	    maxThisChan = v;
 	  }
-	  if(v < theMinVolts[pol]){
-	    theMinVolts[pol] = v;
+	  if(v < minThisChan){
+	    minThisChan = v;
+	  }
+
+	  if((AnitaPol::AnitaPol_t)pol==AnitaPol::kHorizontal && ant==4){
+	    if(v > alfaChanMaxVolts){
+	      alfaChanMaxVolts = v;
+	    }
 	  }
 	  // if(v < minVolts[pol][ant]){
 	  //   minVolts[pol][ant] = v;
 	  // }
 
 	}
+
+
+	if(maxThisChan > theMaxVolts[pol]){
+	  theMaxVolts[pol] = maxThisChan;
+	}
+	if(minThisChan < theMinVolts[pol]){
+	  theMinVolts[pol] = minThisChan;
+	}
+
+	Double_t asym = TMath::Abs(maxThisChan + minThisChan);
+	if(asym > maxAsym[pol]){
+	  maxAsym[pol] = asym;
+	}
+
 
 	delete gr;
       }
