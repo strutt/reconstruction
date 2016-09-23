@@ -3239,8 +3239,13 @@ void MakePlot() {
 
 
 
+  const int n_ANITA_ben = 2;
+  double ANITA_ben_x[n_ANITA_ben] = {19, 20};
+  double ANITA_ben_y[n_ANITA_ben] = {3.97188e-17, 9.1763e-19};
 
+  LogToLine(n_ANITA_ben, ANITA_ben_x);
 
+  TGraph *g_ANITA_ben = new TGraph(n_ANITA_ben, ANITA_ben_x, ANITA_ben_y);
 
 
   double ANITA_x[8] = { 18.0068  ,
@@ -5738,6 +5743,24 @@ void MakePlot() {
 
 
 
+  //g_ANITA->SetLineColor(36);
+  g_ANITA_ben->SetLineColor(kMagenta);
+  g_ANITA_ben->SetLineWidth(3);
+  g_ANITA_ben->SetMarkerStyle(29);
+  g_ANITA_ben->SetMarkerSize(3.5);
+  g_ANITA_ben->SetMarkerColor(kMagenta);
+  g_ANITA_ben->Draw("lp");
+
+  // g_ANITA_ben->SetLineWidth(3);
+  // g_ANITA_ben->SetMarkerStyle(8);
+  // g_ANITA_ben->SetMarkerSize(2.2);
+  // //g_ANITA->SetLineStyle(10);
+  // g_ANITA_ben->SetLineColor(kRed+2);
+  // g_ANITA_ben->SetMarkerColor(kRed+2);
+  // g_ANITA_ben->Draw("lp");
+
+
+
 
   /*
     g_IC_evts_HESE->SetLineColor(kGray+2);
@@ -6054,6 +6077,8 @@ void MakePlot() {
   //Leg_Const_2 -> AddEntry(g_ANITA, "ANITA II", "lp");
   Leg_Const_2 -> AddEntry(g_ANITA_erratum, "ANITA-2 '10 (28.5 days)", "lp");
   Leg_Const_2 -> AddEntry(g_NuMoon2014, "NuMoon '10 (47.6 hrs) ", "lp");
+  Leg_Const_2 -> AddEntry(g_ANITA_ben, "ANITA-3 '16 (17.1 days)", "lp");
+
   //Leg_Const_2_2 -> AddEntry(g_Auger, "Auger '09", "lp");
   //Leg_Const_2 -> AddEntry(g_Auger11, "Auger '11", "lp");
   //Leg_Const_2 -> AddEntry(g_Auger13, "Auger '13", "lp");
