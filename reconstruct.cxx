@@ -261,7 +261,7 @@ int main(int argc, char *argv[]){
       delete usefulEvent;
 
       eventSummaryTree->Fill();
-      delete eventSummary;
+      // delete eventSummary;
     }
     p.inc(entry, nEntries);
   }

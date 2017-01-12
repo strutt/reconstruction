@@ -188,7 +188,7 @@ int main(int argc, char *argv[]){
     }
 
     eventNumber = header->eventNumber;
-
+    alfaChanMaxVolts = -999;
     for(int pol=0; pol<NUM_POL; pol++){
       theMaxVolts[pol] = 0;
       theMinVolts[pol] = 0;

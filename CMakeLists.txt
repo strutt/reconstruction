@@ -1,6 +1,6 @@
 # CMakeLists.txt for event package. It creates a library with dictionary and a main program
 cmake_minimum_required(VERSION 2.8.10)
-project (decimatedDistributions)
+project (reconstruction)
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_BUILD_TYPE Debug)
@@ -55,9 +55,10 @@ set(ANITA_LIBS AnitaEvent AnitaAnalysis AnitaAnalysisTools AnitaCorrelator RootF
 #target_link_libraries(CalibRuns ${ROOT_LIBRARIES} ${ANITA_LIBS})
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wshadow -Werror")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow -Werror")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow -Werror")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
 
-set(BINARIES reconstruct numEvents makeSlimDataQualityTrees)
+set(BINARIES reconstruct numEvents projection makeSlimDataQualityTrees plotReconstructed clustering plotReconstructedMonteCarlo reconstructMonteCarlo projectionMonteCarlo makeSlimMonteCarloDataQualityTrees)
 
 FOREACH(binary ${BINARIES})
   MESSAGE(STATUS "Process file: ${binary}")

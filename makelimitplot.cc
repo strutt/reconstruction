@@ -12,6 +12,7 @@
 #include "TLegend.h"
 #include "TStyle.h"
 #include "TCanvas.h"
+#include "TFile.h"
 
 #include "TText.h"
 
@@ -3239,15 +3240,28 @@ void MakePlot() {
 
 
 
-  const int n_ANITA_ben = 2;
-  double ANITA_ben_x[n_ANITA_ben] = {19, 20};
-  double ANITA_ben_y[n_ANITA_ben] = {3.97188e-17, 9.1763e-19};
+  // const int n_ANITA_ben = 2;
+  TFile* fLimit = TFile::Open("limitNums.root");
+  TGraph* grLimit = (TGraph*) fLimit->Get("grLimit");
 
-  LogToLine(n_ANITA_ben, ANITA_ben_x);
-
-  TGraph *g_ANITA_ben = new TGraph(n_ANITA_ben, ANITA_ben_x, ANITA_ben_y);
-
-
+  LogToLine(grLimit->GetN(), grLimit->GetX());
+  // double ANITA_ben_x[n_ANITA_ben] = {19, 20};
+  // double ANITA_ben_y[n_ANITA_ben] = {3.97188e-17, 9.1763e-19};
+  // LogToLine(n_ANITA_ben, ANITA_ben_x);
+  // LogToLine(grLimit->GetN(), grLimit->GetY());
+  TGraph* g_ANITA_ben = grLimit;
+  // TGraph *g_ANITA_ben = new TGraph(n_ANITA_ben, ANITA_ben_x, ANITA_ben_y);
+  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+  // for(int i=0; i < g_ANITA_ben->GetN(); i++){
+  for(int i=g_ANITA_ben->GetN()-1; i >= 0; i--){
+    if((i%2)==0){
+      g_ANITA_ben->RemovePoint(i);
+    }
+    // std::cout << g_ANITA_ben->GetX()[i] << "\t" << g_ANITA_ben->GetY()[i] << std::endl;
+    std::cout << g_ANITA_ben->GetX()[i] << "\t" << g_ANITA_ben->GetY()[i] << std::endl;
+    // g_ANITA_ben->GetY()[i]*=g_ANITA_ben->GetX()[i];
+  }
+  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
   double ANITA_x[8] = { 18.0068  ,
 			18.5102    ,
 			19.0091    ,
@@ -5029,8 +5043,8 @@ void MakePlot() {
   //g_Kotera_shade->SetLineStyle(3);
   //g_Kotera_shade->SetLineWidth(5);
   //g_Kotera_shade->Draw("f");
-  g_Kotera_shade->Draw("af");
-
+  g_Kotera_shade->Draw("afaxis");
+  gPad->RedrawAxis();
 
   // g_ARIANNA_1296_shade->SetFillStyle(1001);
   //  g_ARIANNA_1296_shade->SetFillColor(15);
@@ -6026,7 +6040,7 @@ void MakePlot() {
 
   //tt->SetTextAngle(45);
   //tt->DrawTextNDC(0.64,0.6,"Connolly \& Vieregg 2016");
-  tt->DrawTextNDC(0.28,0.163,"Connolly \& Vieregg 2016");
+  // tt->DrawTextNDC(0.28,0.163,"Connolly \& Vieregg 2016");
 
 
   /*
@@ -6042,24 +6056,7 @@ void MakePlot() {
 
 
 
-  TLegend *Leg_Const_2 = new TLegend(0.52, 0.7, 0.83, 0.94); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.65, 0.655, 0.95, 0.94); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.665, 0.635, 0.95, 0.94); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.65, 0.66, 0.95, 0.94); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.65, 0.67, 0.95, 0.94); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.63, 0.6, 0.94, 0.93); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.63, 0.5, 0.94, 0.93); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.63, 0.55, 0.94, 0.93); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.70, 0.78, 0.9, 0.93); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.73, 0.78, 0.94, 0.93); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.75, 0.7, 0.94, 0.93); // for NOT little bit zoom in plot // L, B, R, T
-  //TLegend *Leg_Const_2 = new TLegend(0.63, 0.75, 0.89, 0.90); // for NOT little bit zoom in plot
-  //TLegend *Leg_Const_2 = new TLegend(0.59, 0.7, 0.86, 0.91); // for NOT little bit zoom in plot
-  //TLegend *Leg_Const_2 = new TLegend(0.59, 0.63, 0.86, 0.91); // for NOT little bit zoom in plot
-  //TLegend *Leg_Const_2 = new TLegend(0.59, 0.75, 0.9, 0.9); // for NOT little bit zoom in plot
-  //TLegend *Leg_Const_2 = new TLegend(0.58, 0.69, 0.9, 0.9); // for NOT little bit zoom in plot org(110812)
-  //TLegend *Leg_Const_2 = new TLegend(0.55, 0.69, 0.9, 0.9); // for little bit zoom in plot
-
+  TLegend *Leg_Const_2 = new TLegend(0.48, 0.6, 0.75, 0.89); // for NOT little bit zoom in plot // L, B, R,
   //Leg_Const_2 -> AddEntry(g_ESS_base, "ESS base", "l");
   //Leg_Const_2 -> AddEntry(g_ARA3, "ARA3 (3yrs)", "lp");
   //Leg_Const_2 -> AddEntry(g_ARA6_2016, "ARA6 (2016)", "lp");
@@ -6077,7 +6074,7 @@ void MakePlot() {
   //Leg_Const_2 -> AddEntry(g_ANITA, "ANITA II", "lp");
   Leg_Const_2 -> AddEntry(g_ANITA_erratum, "ANITA-2 '10 (28.5 days)", "lp");
   Leg_Const_2 -> AddEntry(g_NuMoon2014, "NuMoon '10 (47.6 hrs) ", "lp");
-  Leg_Const_2 -> AddEntry(g_ANITA_ben, "ANITA-3 '16 (17.1 days)", "lp");
+  Leg_Const_2 -> AddEntry(g_ANITA_ben, "ANITA-3 '16 (17.2 days)", "lp");
 
   //Leg_Const_2_2 -> AddEntry(g_Auger, "Auger '09", "lp");
   //Leg_Const_2 -> AddEntry(g_Auger11, "Auger '11", "lp");
@@ -6126,7 +6123,8 @@ void MakePlot() {
 
   //TLegend *Leg_Const2_2 = new TLegend(0.14, 0.15, 0.5, 0.4);
   //TLegend *Leg_Const2_2 = new TLegend(0.14, 0.14, 0.5, 0.32);
-  TLegend *Leg_Const2_2 = new TLegend(0.16, 0.2, 0.48, 0.334);
+  TLegend *Leg_Const2_2 = new TLegend(0.16, 0.12, 0.43, 0.254);
+  // TLegend *Leg_Const2_2 = new TLegend(0.16, 0.2, 0.48, 0.334);
   //TLegend *Leg_Const2_2 = new TLegend(0.14, 0.15, 0.5, 0.27);
   //TLegend *Leg_Const2_2 = new TLegend(0.14, 0.12, 0.5, 0.4);
   //TLegend *Leg_Const2_2 = new TLegend(0.21, 0.179, 0.425, 0.42);
